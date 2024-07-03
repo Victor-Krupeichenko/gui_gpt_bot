@@ -1,0 +1,11 @@
+<RCC>
+  <qresource prefix="icons">
+    <file>icons/chatbot.ico</file>
+    <file>icons/close.ico</file>
+    <file>icons/collapse.ico</file>
+    <file>icons/keyboard.ico</file>
+    <file>icons/my_ico.ico</file>
+    <file>icons/play.ico</file>
+    <file>icons/speaker.ico</file>
+  </qresource>
+</RCC>
