@@ -31,9 +31,9 @@ class Worker(QThread):
         while True:
             response = self.my_gpt.request_to_gpt(self.question)  # Это может быть длительная операция
             if response.startswith('sorry') or response.startswith('GPT_error'):
-                error = f'GPT_chat: Произошла неизвестная внутренняя ошибка\nGPT_chat: Повторяю вопрос: {self.question}'
-                self.my_gpt.ui.label_2_output_text.append(f'{error}')
-                self.my_gpt.ui.label_2_output_text.append(f'\n{"*" * 106}\n')
+                # error=f'GPT_chat: Произошла неизвестная внутренняя ошибка\nGPT_chat: Повторяю вопрос: {self.question}'
+                # self.my_gpt.ui.label_2_output_text.append(f'{error}')
+                # self.my_gpt.ui.label_2_output_text.append(f'\n{"*" * 106}\n')
                 time.sleep(5)
                 continue
             break
@@ -55,8 +55,8 @@ class MyGpt(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.client = Client()
-        self.model = 'gpt-3.5-turbo'
-        # self.model = 'gpt-4o'
+        # self.model = 'gpt-3.5-turbo'
+        self.model = 'gpt-4o'
         self.setWindowFlags(Qt.FramelessWindowHint)
         # self.setAttribute(Qt.WA_TranslucentBackground)
         self.ui.minimize_window_button.setCursor(Qt.PointingHandCursor)
@@ -103,7 +103,7 @@ class MyGpt(QMainWindow):
         try:
             response = self.client.chat.completions.create(
                 model=self.model,
-                messages=[{'role': 'user', 'content': f'{question} (пиши на русском)'}],
+                messages=[{'role': 'user', 'content': f'{question}  (ответ пиши на русском языке)'}],
             )
             return response.choices[0].message.content.replace('\n\n', '\n')
         except (RetryProviderError, Exception) as e:
@@ -116,9 +116,8 @@ class MyGpt(QMainWindow):
         self.question = self.ui.lineEdit_question.text()
         self.ui.lineEdit_question.clear()
 
-        # Создание новый поток
-        self.worker.set_question(self.question)  # передаем вопрос который мы получили выше
-        self.worker.start()  # запускаем новый поток
+        self.worker.set_question(self.question)
+        self.worker.start()
 
     def response_output(self, response):
         """Вывод ответа"""
